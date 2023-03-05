@@ -1,8 +1,12 @@
 # hiptocu
 transfer hip to cuda
 ```bash
-sed -i "s/hipLaunchKernelGGL(\(\w\+\), \(\w\+\), \(\w\+\)[ ]*, 0, 0,/\1<<<\2,\3>>>(/" *.cppsed -i -e "/hip_runtime/d" -e "s/hipblas/cublas/g" -e "s/HIPBLAS/CUBLAS/g" *.cpp *.h sed -i -e "s/HostMalloc/MallocHost/" -e "s/hip/cuda/g" *.cpp *.h这是三条用于在Linux命令行下批量修改文件内容的命令，可以用于将HIP代码转换为CUDA代码。这些命令的具体含义如下：
-	```
+sed -i "s/hipLaunchKernelGGL(\(\w\+\), \(\w\+\), \(\w\+\)[ ]*, 0, 0,/\1<<<\2,\3>>>(/" *.cpp
+sed -i -e "/hip_runtime/d" -e "s/hipblas/cublas/g" -e "s/HIPBLAS/CUBLAS/g" *.cpp *.h 
+sed -i -e "s/HostMalloc/MallocHost/" -e "s/hip/cuda/g" *.cpp *.h
+```
+这是三条用于在Linux命令行下批量修改文件内容的命令，可以用于将HIP代码转换为CUDA代码。这些命令的具体含义如下：
+
   将所有 .cpp 文件中的 hipLaunchKernelGGL(kernelName, gridSize, blockSize, 0, 0, 替换为 kernelName<<<gridSize, blockSize>>>(
 ```bash
 sed -i "s/hipLaunchKernelGGL(\(\w\+\), \(\w\+\), \(\w\+\)[ ]*, 0, 0,/\1<<<\2,\3>>>(/" *.cpp
@@ -16,11 +20,13 @@ sed -i "s/hipLaunchKernelGGL(\(\w\+\), \(\w\+\), \(\w\+\)[ ]*, 0, 0,/\1<<<\2,\3>
 	1. 将所有 .cpp 和 .h 文件中的 hip_runtime 字符串所在的行删除，将 hipblas 替换为 cublas，将 HIPBLAS 替换为 CUBLAS：
 
 ```bash
-sed -i -e "/hip_runtime/d" -e "s/hipblas/cublas/g" -e "s/HIPBLAS/CUBLAS/g" *.cpp *.h这条命令使用 sed 工具，并使用多个编辑命令（-e 参数）：
+sed -i -e "/hip_runtime/d" -e "s/hipblas/cublas/g" -e "s/HIPBLAS/CUBLAS/g" *.cpp *.h
+```
+这条命令使用 sed 工具，并使用多个编辑命令（-e 参数）：
 	* /hip_runtime/d 表示删除所有包含 hip_runtime 字符串的行；
 	* s/hipblas/cublas/g 表示将所有 hipblas 字符串替换为 cublas；
 	* s/HIPBLAS/CUBLAS/g 表示将所有 HIPBLAS 字符串替换为 CUBLAS。
-  ```
+
 
 注意，这条命令修改的文件包括所有扩展名为 .cpp 和 .h 的文件，且会直接覆盖原文件。
 	1. 将所有 .cpp 和 .h 文件中的 HostMalloc 替换为 MallocHost，将 hip 替换为 cuda：
